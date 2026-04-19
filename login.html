@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Courtify</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+  <img src="logo.png" class="logo">
+
+  <h1>Courtify</h1>
+
+  <p style="text-align:center; color:#2563eb;">
+    Reserva tu cancha. Juega tu pasión.
+  </p>
+
+  <h2>Iniciar Sesión</h2>
+
+  <input type="email" id="email" placeholder="Correo">
+  <input type="password" id="password" placeholder="Contraseña">
+  
+
+<p class="link-recuperar" onclick="recuperarPassword()">
+  ¿Olvidaste tu contraseña?
+</p>
+
+  <!-- 👇 SIN onclick -->
+  <button id="btnLogin">Ingresar</button>
+  <button id="btnIrRegistro">Registrarse</button>
+</div>
+
+<script type="module" src="auth.js"></script>
+
+</body>
+</html>

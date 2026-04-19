@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registro - Courtify</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Crear Cuenta</h1>
+
+  <input type="text" id="nombre" placeholder="Nombre" required>
+  <input type="text" id="apellido" placeholder="Apellido" required>
+  <input type="email" id="email" placeholder="Correo" required>
+  <input type="text" id="telefono" placeholder="Teléfono" required>
+  <input type="text" id="rut" placeholder="RUT" required>
+  <input type="date" id="fechaNacimiento" required>
+
+  <select id="genero">
+    <option value="">Género (opcional)</option>
+    <option>Masculino</option>
+    <option>Femenino</option>
+    <option>Otro</option>
+  </select>
+
+  <input type="password" id="password" placeholder="Contraseña" required>
+  <input type="password" id="confirmPassword" placeholder="Repetir contraseña" required>
+
+ <div class="terminos">
+  <input type="checkbox" id="terminos">
+  <label for="terminos">
+    Acepto los 
+    <a href="terminos.html" target="_blank">términos y condiciones</a>
+  </label>
+</div>
+
+  <button onclick="registrar()">Inscribirme</button>
+  <button onclick="volverLogin()" class="btn-secundario">Login</button>
+
+  <p style="font-size:12px; margin-top:10px;">
+    Si tienes problemas registrándote contáctanos a 
+    <b>contacto@courtify.cl</b>
+  </p>
+</div>
+
+<script type="module" src="auth.js"></script>
+
+</body>
+</html>

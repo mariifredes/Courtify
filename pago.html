@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pago</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💳 Pago</h1>
+
+<h2>Resumen</h2>
+<p>Monto: <strong>$10.000</strong></p>
+
+<h2>Método de pago</h2>
+
+<select id="metodo">
+  <option>Tarjeta</option>
+  <option>Transferencia</option>
+  <option>Efectivo</option>
+</select>
+
+<input type="text" id="nombreTitular" placeholder="Nombre del titular">
+<input type="text" id="numeroTarjeta" placeholder="Número de tarjeta">
+<input type="text" id="fechaExp" placeholder="MM/AA">
+<input type="text" id="cvv" placeholder="CVV">
+
+<button onclick="pagar()">Pagar</button>
+
+<button onclick="volver()">Volver</button>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "TU_API_KEY_REAL",
+  authDomain: "courtify-61b99.firebaseapp.com",
+  projectId: "courtify-61b99",
+  appId: "1:796727690755:web:e701204c38cc85f2813036"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+async function pagar() {
+
+  const metodo = document.getElementById("metodo").value;
+  const nombre = document.getElementById("nombreTitular").value;
+  const tarjeta = document.getElementById("numeroTarjeta").value;
+
+  if (!nombre || !tarjeta) {
+    alert("Completa los datos");
+    return;
+  }
+
+  const user = auth.currentUser;
+
+  await addDoc(collection(db, "pagos"), {
+    usuario: user?.email,
+    metodo: metodo,
+    monto: 10000,
+    fecha: new Date().toLocaleString()
+  });
+
+  alert("✅ Pago realizado con éxito");
+
+  window.location.href = "reservas.html";
+}
+
+window.pagar = pagar;
+window.volver = () => window.location.href = "reservas.html";
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Courtify</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <h1>⚽ Courtify</h1>
+    <p id="saludo" class="subtitulo">Hola 👋</p>
+
+    <!-- RESERVAR -->
+    <div class="section-card">
+      <div class="seccion-titulo">📍 Reservar Cancha</div>
+
+      <input type="text" id="nombre" placeholder="Tu nombre">
+      <input type="text" id="cancha" placeholder="Cancha">
+      <input type="date" id="fecha">
+      <input type="time" id="hora">
+
+      <button class="reserva-btn" onclick="reservar()">Reservar</button>
+    </div>
+
+    <!-- CANCHAS -->
+    <div class="section-card">
+      <div class="seccion-titulo">⚽ Canchas disponibles</div>
+
+      <ul class="lista-canchas">
+        <li>Cancha 1 - Pasto sintético</li>
+        <li>Cancha 2 - Fútbol 7</li>
+        <li>Cancha 3 - Techada</li>
+      </ul>
+    </div>
+
+    <!-- PARTIDOS -->
+    <div class="section-card">
+      <div class="seccion-titulo">🔥 Partidos disponibles</div>
+
+      <input type="text" id="jugador" placeholder="Tu nombre">
+      <input type="text" id="canchaPartido" placeholder="Cancha">
+
+      <button class="partido-btn" onclick="crearPartido()">Crear partido</button>
+
+      <ul id="listaPartidos" class="lista-partidos"></ul>
+    </div>
+
+  </div>
+
+  <!-- MENÚ ABAJO -->
+  <div class="bottom-nav">
+    <button onclick="irHome()">🏠 Home</button>
+    <button onclick="irMisReservas()">📅 Reservas</button>
+    <button onclick="irPerfil()">👤 Perfil</button>
+  </div>
+
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>
