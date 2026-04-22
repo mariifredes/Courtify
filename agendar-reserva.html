@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendar reserva - Courtify</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="perfil-header">
+      <h1>🗓️ Agendar reserva</h1>
+      <p>Completa los datos para confirmar tu cancha</p>
+    </div>
+
+    <div class="cancha-seleccionada-card">
+      <img id="imagenCanchaSeleccionada" src="" alt="Cancha seleccionada">
+      <div class="cancha-seleccionada-info">
+        <h3 id="tituloCanchaSeleccionada">Cancha seleccionada</h3>
+        <p>Completa la fecha y hora de tu reserva</p>
+      </div>
+    </div>
+
+    <div class="perfil-info-card">
+      <h3>Datos de la reserva</h3>
+
+      <div class="perfil-form">
+        <input type="text" id="nombre" placeholder="Tu nombre">
+        <input type="text" id="cancha" placeholder="Cancha seleccionada" readonly>
+        <input type="date" id="fecha" onchange="actualizarResumen()">
+        <input type="time" id="hora" onchange="actualizarResumen()">
+      </div>
+
+      <p id="resumenFechaHora" class="mini-texto">Selecciona fecha y hora</p>
+    </div>
+
+    <div class="perfil-botones">
+      <button class="btn-secundario" onclick="reservar()">Confirmar reserva</button>
+      <button class="btn-volver" onclick="window.location.href='reserva.html'">Volver</button>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <button onclick="irHome()">🏠<span>Inicio</span></button>
+    <button onclick="irMisReservas()">📅<span>Reservas</span></button>
+    <button onclick="irPerfil()">👤<span>Perfil</span></button>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

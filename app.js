@@ -1,8 +1,23 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, arrayUnion } 
-from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import {
+  getAuth,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  doc,
+  arrayUnion,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+// 🔥 CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyBpiIXpMGzSAP6LLrSdWdmVdKU9IFnQj14",
   authDomain: "courtify-61b99.firebaseapp.com",
@@ -12,99 +27,213 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth();
+const auth = getAuth(app);
 
-const saludo = document.getElementById("saludo");
+const IMAGEN_DEFAULT = "img/cancha-1.jpeg";
 
-if (saludo) {
+// ================= 👤 USUARIO =================
+onAuthStateChanged(auth, (user) => {
+  const saludo = document.getElementById("saludo");
+
+  if (saludo) {
+    if (user) {
+      saludo.textContent = "Hola, " + user.email + " 👋";
+    } else {
+      saludo.textContent = "Hola, usuario 👋";
+    }
+  }
+
+  if (user && document.getElementById("misReservas")) {
+    cargarMisReservas();
+  }
+});
+
+// ================= 🏟️ CARGAR CANCHAS (HOME) =================
+function loadCourts() {
+  const container = document.getElementById("courts-container");
+  if (!container || typeof courts === "undefined") return;
+
+  container.innerHTML = "";
+
+  courts.forEach((court) => {
+    container.innerHTML += `
+      <div class="cancha-card">
+        <img src="${court.image}" class="court-img" alt="${court.name}">
+        <div class="cancha-overlay">
+          <h3>${court.name}</h3>
+          <button onclick="abrirReserva('${court.name}', '${court.image}')">Reservar</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+// ================= 📍 ABRIR RESERVA DESDE UNA CANCHA =================
+window.abrirReserva = (nombreCancha, imagenCancha = "") => {
+  localStorage.setItem("canchaSeleccionada", nombreCancha || "");
+  localStorage.setItem("imagenCanchaSeleccionada", imagenCancha || IMAGEN_DEFAULT);
+  window.location.href = "agendar-reserva.html";
+};
+
+// Compatibilidad por si todavía usan onclick="seleccionarCancha(...)"
+window.seleccionarCancha = (nombreCancha, imagenCancha = "") => {
+  window.abrirReserva(nombreCancha, imagenCancha);
+};
+
+// ================= 📥 CARGAR CANCHA SELECCIONADA EN AGENDAR-RESERVA =================
+window.cargarCanchaSeleccionada = () => {
+  const cancha = localStorage.getItem("canchaSeleccionada") || "";
+  const imagenGuardada = localStorage.getItem("imagenCanchaSeleccionada") || "";
+  const imagen = imagenGuardada.trim() !== "" ? imagenGuardada : IMAGEN_DEFAULT;
+
+  const inputCancha = document.getElementById("cancha");
+  const titulo = document.getElementById("tituloCanchaSeleccionada");
+  const imagenElemento = document.getElementById("imagenCanchaSeleccionada");
+
+  if (inputCancha) {
+    inputCancha.value = cancha;
+  }
+
+  if (titulo) {
+    titulo.textContent = cancha || "Cancha seleccionada";
+  }
+
+  if (imagenElemento) {
+    imagenElemento.src = imagen;
+    imagenElemento.alt = cancha || "Cancha seleccionada";
+
+    imagenElemento.onerror = () => {
+      imagenElemento.src = IMAGEN_DEFAULT;
+    };
+  }
+};
+
+// ================= 🗓️ ACTUALIZAR RESUMEN FECHA/HORA =================
+window.actualizarResumen = () => {
+  const fecha = document.getElementById("fecha")?.value;
+  const hora = document.getElementById("hora")?.value;
+  const resumen = document.getElementById("resumenFechaHora");
+
+  if (!resumen) return;
+
+  if (fecha && hora) {
+    resumen.textContent = `${fecha} a las ${hora} hrs.`;
+  } else if (fecha) {
+    resumen.textContent = fecha;
+  } else {
+    resumen.textContent = "Selecciona fecha y hora";
+  }
+};
+
+// ================= 📅 RESERVAR =================
+async function reservar() {
   const user = auth.currentUser;
 
-  if (user) {
-    saludo.textContent = "Hola 👋 " + user.email;
+  if (!user) {
+    alert("Debes iniciar sesión");
+    return;
   }
-}
-// ================= RESERVAR =================
-async function reservar() {
-  const nombre = document.getElementById("nombre").value;
-  const cancha = document.getElementById("cancha").value;
-  const fecha = document.getElementById("fecha").value;
-  const hora = document.getElementById("hora").value;
 
-  if (!nombre || !cancha || !fecha || !hora) {
+  const nombre = document.getElementById("nombre")?.value.trim() || "";
+  const cancha = document.getElementById("cancha")?.value.trim();
+  const fecha = document.getElementById("fecha")?.value;
+  const hora = document.getElementById("hora")?.value;
+
+  if (!cancha || !fecha || !hora) {
     alert("Completa todos los campos");
     return;
   }
 
-  await addDoc(collection(db, "reservas"), {
-    nombre,
-    cancha,
-    fecha,
-    hora
-  });
+  try {
+    await addDoc(collection(db, "reservas"), {
+      userId: user.uid,
+      userEmail: user.email || "",
+      nombre,
+      cancha,
+      fecha,
+      hora,
+      createdAt: new Date()
+    });
 
-  alert("✅ Reserva realizada con éxito");
-
-  // 👉 REDIRECCIÓN
-  window.location.href = "mis-reservas.html";
+    alert("✅ Reserva confirmada");
+    window.location.href = "mis-reservas.html";
+  } catch (error) {
+    console.error(error);
+    alert("Error al reservar");
+  }
 }
 
-// ================= MOSTRAR EN RESERVAS (opcional) =================
-async function mostrarReservas() {
-  const lista = document.getElementById("lista");
-  if (!lista) return;
-
-  lista.innerHTML = "";
-
-  const datos = await getDocs(collection(db, "reservas"));
-
-  datos.forEach(doc => {
-    const li = document.createElement("li");
-    li.textContent = doc.data().nombre + " - " + doc.data().cancha;
-    lista.appendChild(li);
-  });
-}
-
-// ================= MIS RESERVAS (CLAVE 🔥) =================
+// ================= 📊 MIS RESERVAS =================
 async function cargarMisReservas() {
   const lista = document.getElementById("misReservas");
   if (!lista) return;
 
-  lista.innerHTML = "<li>Cargando...</li>";
-
-  const datos = await getDocs(collection(db, "reservas"));
-
-  lista.innerHTML = "";
-
-  if (datos.empty) {
-    lista.innerHTML = "<li>No hay reservas</li>";
+  const user = auth.currentUser;
+  if (!user) {
+    lista.innerHTML = "<li>Debes iniciar sesión</li>";
     return;
   }
 
-  datos.forEach(doc => {
-    const data = doc.data();
+  lista.innerHTML = "<li>Cargando...</li>";
 
-    const li = document.createElement("li");
-    li.textContent =
-      data.nombre + " | " +
-      data.cancha + " | " +
-      data.fecha + " | " +
-      data.hora;
+  try {
+    const q = query(
+      collection(db, "reservas"),
+      where("userId", "==", user.uid)
+    );
 
-    lista.appendChild(li);
-  });
+    const snapshot = await getDocs(q);
+
+    lista.innerHTML = "";
+
+    if (snapshot.empty) {
+      lista.innerHTML = "<li>No tienes reservas</li>";
+      return;
+    }
+
+    snapshot.forEach((docu) => {
+      const data = docu.data();
+
+      lista.innerHTML += `
+        <li>
+          ${data.cancha}<br>
+          ${data.fecha} - ${data.hora}
+        </li>
+      `;
+    });
+  } catch (error) {
+    console.error(error);
+    lista.innerHTML = "<li>Error al cargar</li>";
+  }
 }
 
-// ================= PARTIDOS =================
+// ================= 🔥 PARTIDOS =================
 async function crearPartido() {
-  const jugador = document.getElementById("jugador").value;
-  const cancha = document.getElementById("canchaPartido").value;
+  const jugador = document.getElementById("jugador")?.value.trim();
+  const cancha = document.getElementById("canchaPartido")?.value.trim();
 
-  await addDoc(collection(db, "partidos"), {
-    cancha,
-    jugadores: [jugador]
-  });
+  if (!jugador || !cancha) {
+    alert("Completa los datos del partido");
+    return;
+  }
 
-  mostrarPartidos();
+  try {
+    await addDoc(collection(db, "partidos"), {
+      cancha,
+      jugadores: [jugador]
+    });
+
+    const inputJugador = document.getElementById("jugador");
+    const inputCancha = document.getElementById("canchaPartido");
+
+    if (inputJugador) inputJugador.value = "";
+    if (inputCancha) inputCancha.value = "";
+
+    mostrarPartidos();
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo crear el partido");
+  }
 }
 
 async function mostrarPartidos() {
@@ -113,59 +242,78 @@ async function mostrarPartidos() {
 
   lista.innerHTML = "";
 
-  const datos = await getDocs(collection(db, "partidos"));
+  try {
+    const snapshot = await getDocs(collection(db, "partidos"));
 
-  datos.forEach(docu => {
-    const li = document.createElement("li");
-    const data = docu.data();
+    if (snapshot.empty) {
+      lista.innerHTML = "<li>No hay partidos disponibles</li>";
+      return;
+    }
 
-    li.textContent = data.cancha + " - " + data.jugadores.join(", ");
+    snapshot.forEach((docu) => {
+      const data = docu.data();
 
-    const btn = document.createElement("button");
-    btn.textContent = "Unirme";
-
-    btn.onclick = () => unirse(docu.id);
-
-    li.appendChild(btn);
-    lista.appendChild(li);
-  });
+      lista.innerHTML += `
+        <li>
+          ${data.cancha} - ${data.jugadores.join(", ")}
+          <button onclick="unirse('${docu.id}')">Unirme</button>
+        </li>
+      `;
+    });
+  } catch (error) {
+    console.error(error);
+    lista.innerHTML = "<li>Error al cargar partidos</li>";
+  }
 }
 
 async function unirse(id) {
   const nombre = prompt("Tu nombre");
 
-  await updateDoc(doc(db, "partidos", id), {
-    jugadores: arrayUnion(nombre)
-  });
+  if (!nombre) return;
 
-  mostrarPartidos();
+  try {
+    await updateDoc(doc(db, "partidos", id), {
+      jugadores: arrayUnion(nombre)
+    });
+
+    mostrarPartidos();
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo unir al partido");
+  }
 }
 
-// ================= NAVEGACIÓN =================
-window.irPerfil = () => window.location.href = "perfil.html";
-window.irMisReservas = () => window.location.href = "mis-reservas.html";
-window.irPago = () => window.location.href = "pago.html";
-
-// ================= LOGOUT =================
+// ================= 🚪 LOGOUT =================
 window.logout = async () => {
-  const auth = getAuth();
-  await signOut(auth);
-  window.location.href = "login.html";
+  try {
+    await signOut(auth);
+    window.location.href = "login.html";
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo cerrar sesión");
+  }
 };
 
-// ================= EXPORTAR =================
+// ================= 🧭 NAVEGACIÓN =================
+window.irHome = () => window.location.href = "home.html";
+window.irReservar = () => window.location.href = "reserva.html";
+window.irMisReservas = () => window.location.href = "mis-reservas.html";
+window.irPerfil = () => window.location.href = "perfil.html";
+window.irPartidos = () => window.location.href = "home.html#partidos";
+
+// ================= 🚀 EXPORTAR =================
 window.reservar = reservar;
+window.unirse = unirse;
 window.crearPartido = crearPartido;
 
-// ================= INICIO INTELIGENTE 🔥 =================
-if (document.getElementById("lista")) {
-  mostrarReservas();
-}
+// ================= 🚀 INICIO =================
+loadCourts();
 
 if (document.getElementById("listaPartidos")) {
   mostrarPartidos();
 }
 
-if (document.getElementById("misReservas")) {
-  cargarMisReservas();
+if (document.getElementById("imagenCanchaSeleccionada")) {
+  window.cargarCanchaSeleccionada();
+  window.actualizarResumen();
 }

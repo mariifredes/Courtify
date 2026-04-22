@@ -1,82 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Perfil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil - Courtify</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<div class="container">
-  <h1>👤 Mi Perfil</h1>
+  <div class="container">
 
-  <p><strong>Correo:</strong></p>
-  <p id="usuario"></p>
+    <div class="perfil-header">
+      <h1>👤 Mi Perfil</h1>
+      <p>Completa tu información personal</p>
+    </div>
 
-  <h2>Datos personales</h2>
+    <div class="perfil-card">
+      <div class="perfil-avatar">👤</div>
+      <h2 id="nombrePerfil">Usuario Courtify</h2>
+      <p><strong>Correo:</strong> <span id="usuario">Cargando...</span></p>
+    </div>
 
-  <input type="text" id="nombre" placeholder="Nombre completo">
-  <input type="number" id="edad" placeholder="Edad">
-  <input type="text" id="sexo" placeholder="Sexo">
-  <input type="text" id="telefono" placeholder="Número de teléfono">
+    <div class="perfil-info-card">
+      <h3>Datos personales</h3>
 
-  <!-- EXTRA PRO -->
-  <input type="text" id="deporte" placeholder="Deporte favorito ⚽">
-  <input type="text" id="nivel" placeholder="Nivel (Principiante/Intermedio/Avanzado)">
+      <div class="perfil-form">
+        <input type="text" id="nombre" placeholder="Nombre completo">
+        <input type="number" id="edad" placeholder="Edad">
+        <input type="text" id="sexo" placeholder="Sexo">
+        <input type="text" id="telefono" placeholder="Número de teléfono">
+        <input type="text" id="deporte" placeholder="Deporte favorito">
+        <input type="text" id="nivel" placeholder="Nivel (Principiante/Intermedio/Avanzado)">
+      </div>
+    </div>
 
-  <button onclick="guardarPerfil()">Guardar</button>
-
-  <button onclick="volver()">Volver</button>
+<div class="perfil-botones">
+  <button class="btn-secundario" onclick="guardarPerfil()">Guardar</button>
+  <button class="btn-volver" onclick="irHome()">Volver</button>
+  <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
 </div>
+  </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+  <div class="bottom-nav">
+    <button onclick="irHome()">🏠<span>Inicio</span></button>
+    <button onclick="irMisReservas()">📅<span>Reservas</span></button>
+    <button onclick="irPerfil()">👤<span>Perfil</span></button>
+  </div>
 
-const firebaseConfig = {
-  apiKey: "TU_API_KEY_REAL",
-  authDomain: "courtify-61b99.firebaseapp.com",
-  projectId: "courtify-61b99",
-  appId: "1:796727690755:web:e701204c38cc85f2813036"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Mostrar usuario
-const user = auth.currentUser;
-if (user) {
-  document.getElementById("usuario").textContent = user.email;
-}
-
-// Guardar perfil
-async function guardarPerfil() {
-  const user = auth.currentUser;
-
-  if (!user) {
-    alert("Debes iniciar sesión");
-    return;
-  }
-
-  const datos = {
-    nombre: document.getElementById("nombre").value,
-    edad: document.getElementById("edad").value,
-    sexo: document.getElementById("sexo").value,
-    telefono: document.getElementById("telefono").value,
-    deporte: document.getElementById("deporte").value,
-    nivel: document.getElementById("nivel").value
-  };
-
-  await setDoc(doc(db, "usuarios", user.uid), datos);
-
-  alert("Perfil guardado");
-}
-
-window.guardarPerfil = guardarPerfil;
-window.volver = () => window.location.href = "reservas.html";
-</script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="perfil.js"></script>
 
 </body>
 </html>

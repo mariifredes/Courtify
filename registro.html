@@ -1,49 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro - Courtify</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="login-body">
 
-<div class="container">
-  <h1>Crear Cuenta</h1>
+  <div class="login-wrapper">
+    <div class="login-card registro-card">
 
-  <input type="text" id="nombre" placeholder="Nombre" required>
-  <input type="text" id="apellido" placeholder="Apellido" required>
-  <input type="email" id="email" placeholder="Correo" required>
-  <input type="text" id="telefono" placeholder="Teléfono" required>
-  <input type="text" id="rut" placeholder="RUT" required>
-  <input type="date" id="fechaNacimiento" required>
+      <h1 class="login-title">Crear Cuenta</h1>
+      <p class="login-subtitle">Únete a Courtify y comienza a reservar.</p>
 
-  <select id="genero">
-    <option value="">Género (opcional)</option>
-    <option>Masculino</option>
-    <option>Femenino</option>
-    <option>Otro</option>
-  </select>
+      <div class="registro-form-grid">
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="text" id="apellido" placeholder="Apellido">
+        <input type="email" id="email" placeholder="Correo">
+        <input type="text" id="telefono" placeholder="Teléfono">
 
-  <input type="password" id="password" placeholder="Contraseña" required>
-  <input type="password" id="confirmPassword" placeholder="Repetir contraseña" required>
+        <input type="text" id="rut" placeholder="RUT">
+        <input type="date" id="fechaNacimiento">
 
- <div class="terminos">
-  <input type="checkbox" id="terminos">
-  <label for="terminos">
-    Acepto los 
-    <a href="terminos.html" target="_blank">términos y condiciones</a>
-  </label>
-</div>
+        <select id="genero">
+          <option value="">Género (opcional)</option>
+          <option value="femenino">Femenino</option>
+          <option value="masculino">Masculino</option>
+          <option value="otro">Otro</option>
+          <option value="prefiero-no-decir">Prefiero no decir</option>
+        </select>
 
-  <button onclick="registrar()">Inscribirme</button>
-  <button onclick="volverLogin()" class="btn-secundario">Login</button>
+        <input type="password" id="password" placeholder="Contraseña">
+        <input type="password" id="repetirPassword" placeholder="Repetir contraseña">
+      </div>
 
-  <p style="font-size:12px; margin-top:10px;">
-    Si tienes problemas registrándote contáctanos a 
-    <b>contacto@courtify.cl</b>
-  </p>
-</div>
+      <label class="check-terminos">
+        <input type="checkbox" id="terminos">
+        <span>Acepto los <a href="#">términos y condiciones</a></span>
+      </label>
 
-<script type="module" src="auth.js"></script>
+      <div class="login-buttons">
+        <button id="btnRegistrar" class="btn-login">Inscribirme</button>
+        <button type="button" class="btn-registro" onclick="volverLogin()">Login</button>
+      </div>
 
+      <p class="registro-ayuda">
+        Si tienes problemas registrándote contáctanos a contacto@courtify.cl
+      </p>
+
+    </div>
+  </div>
+
+  <script type="module" src="auth.js"></script>
 </body>
 </html>

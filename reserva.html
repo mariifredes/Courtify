@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserva - Courtify</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="perfil-header">
+      <h1>📍 Reservar cancha</h1>
+      <p>Selecciona tu club y espacio disponible</p>
+    </div>
+
+    <div class="reserva-top-card">
+      <div class="reserva-top-icono">⚽</div>
+      <div class="reserva-top-texto">
+        <h3>Futbolito y Pádel</h3>
+        <p>Elige la cancha que prefieras</p>
+      </div>
+    </div>
+
+    <h3 class="titulo-reserva-lista">Selecciona un club</h3>
+
+    <div class="clubes-lista">
+      <div class="club-card" onclick="abrirReserva('Cancha Futbolito Marcelo Salas', 'img/cancha-2.jpeg')">
+        <img src="img/cancha-2.jpeg" alt="Cancha Futbolito Marcelo Salas">
+        <button class="fav-btn" type="button">🤍</button>
+        <div class="club-overlay">
+          <h3>Cancha Futbolito Marcelo Salas</h3>
+          <p>Viña del Mar, V Región</p>
+        </div>
+      </div>
+
+      <div class="club-card" onclick="abrirReserva('Cancha Futbolito Sausalito', 'img/cancha-1.jpeg')">
+        <img src="img/cancha-1.jpeg" alt="Cancha Futbolito Sausalito">
+        <button class="fav-btn" type="button">🤍</button>
+        <div class="club-overlay">
+          <h3>Cancha Futbolito Sausalito</h3>
+          <p>Viña del Mar, V Región</p>
+        </div>
+      </div>
+
+      <div class="club-card" onclick="abrirReserva('Viña Padel Club', 'img/cancha-3.jpeg')">
+        <img src="img/cancha-3.jpeg" alt="Viña Padel Club">
+        <button class="fav-btn" type="button">🤍</button>
+        <div class="club-overlay">
+          <h3>Viña Padel Club</h3>
+          <p>Viña del Mar, V Región</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <button onclick="irHome()">🏠<span>Inicio</span></button>
+    <button onclick="irMisReservas()">📅<span>Reservas</span></button>
+    <button onclick="irPerfil()">👤<span>Perfil</span></button>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

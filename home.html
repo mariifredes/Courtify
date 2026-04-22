@@ -6,60 +6,79 @@
   <title>Home - Courtify</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
   <div class="container">
 
-    <!-- HEADER -->
-    <h1>⚽ Courtify</h1>
-    <p id="saludo" class="subtitulo">Hola 👋</p>
+    <!-- ENCABEZADO -->
+    <div class="top-header mejorado">
+  <div class="header-texto">
+    <span class="marca"> Courtify</span>
+    <h2>Hola, usuario 👋</h2>
+  </div>
+  <div class="icono-noti">🔔</div>
+</div>
 
-    <!-- RESERVAR -->
-    <div class="section-card">
-      <div class="seccion-titulo">📍 Reservar Cancha</div>
+    <!-- ACCESOS RÁPIDOS -->
+   <section class="quick-access">
+  <h2>Accesos rápidos</h2>
 
-      <input type="text" id="nombre" placeholder="Tu nombre">
-      <input type="text" id="cancha" placeholder="Cancha">
-      <input type="date" id="fecha">
-      <input type="time" id="hora">
-
-      <button class="reserva-btn" onclick="reservar()">Reservar</button>
+  <div class="quick-grid">
+    <div class="quick-card card-1" onclick="irReservar()">
+      <h3>📍 Reservar</h3>
+      <p>Reserva tu cancha</p>
     </div>
 
-    <!-- CANCHAS -->
-    <div class="section-card">
-      <div class="seccion-titulo">⚽ Canchas disponibles</div>
+    <div class="quick-card card-3" onclick="irPartidos()">
+      <h3>🔥 Partidos</h3>
+      <p>Encuentra jugadores</p>
+    </div>
+</section>
 
-      <ul class="lista-canchas">
-        <li>Cancha 1 - Pasto sintético</li>
-        <li>Cancha 2 - Fútbol 7</li>
-        <li>Cancha 3 - Techada</li>
+    <!-- CANCHAS DESTACADAS -->
+    <section class="canchas-destacadas">
+  <div class="seccion-titulo"> Canchas destacadas</div>
+
+  <div class="canchas-grid">
+    <div class="cancha-card cancha1">
+      <div class="cancha-overlay">
+        <h3>Cancha Futbolito Sausalito</h3>
+      </div>
+    </div>
+
+    <div class="cancha-card cancha2">
+      <div class="cancha-overlay">
+        <h3>Cancha Futbolito Marcelo Salas</h3>
+      </div>
+    </div>
+
+    <div class="cancha-card cancha3">
+      <div class="cancha-overlay">
+        <h3>Viña Pádel Club</h3>
+      </div>
+    </div>
+  </div>
+</section>
+    <!-- PARTIDOS ABIERTOS -->
+    <section class="section-card">
+      <div class="seccion-titulo">🔥 Partidos abiertos</div>
+      <p class="mini-texto">Únete o crea un partido con otros jugadores.</p>
+
+      <ul id="listaPartidos" class="lista-info">
+        <li>Cancha 2 - Hoy 20:00</li>
+        <li>Cancha 1 - Mañana 18:30</li>
       </ul>
-    </div>
-
-    <!-- PARTIDOS -->
-    <div class="section-card">
-      <div class="seccion-titulo">🔥 Partidos disponibles</div>
-
-      <input type="text" id="jugador" placeholder="Tu nombre">
-      <input type="text" id="canchaPartido" placeholder="Cancha">
-
-      <button class="partido-btn" onclick="crearPartido()">Crear partido</button>
-
-      <ul id="listaPartidos" class="lista-partidos"></ul>
-    </div>
+    </section>
 
   </div>
 
-  <!-- MENÚ ABAJO -->
+  <!-- MENÚ INFERIOR -->
   <div class="bottom-nav">
-    <button onclick="irHome()">🏠 Home</button>
-    <button onclick="irMisReservas()">📅 Reservas</button>
-    <button onclick="irPerfil()">👤 Perfil</button>
+    <button onclick="irHome()">🏠<span>Inicio</span></button>
+    <button onclick="irMisReservas()">📅<span>Reservas</span></button>
+    <button onclick="irPerfil()">👤<span>Perfil</span></button>
   </div>
 
   <script type="module" src="app.js"></script>
-
 </body>
 </html>

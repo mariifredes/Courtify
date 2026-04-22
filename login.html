@@ -1,36 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Courtify</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="login-body">
 
-<div class="container">
-  <img src="logo.png" class="logo">
+  <div class="login-wrapper">
+    <div class="login-card">
 
-  <h1>Courtify</h1>
+      <img src="logo.png" alt="Logo Courtify" class="login-logo">
 
-  <p style="text-align:center; color:#2563eb;">
-    Reserva tu cancha. Juega tu pasión.
-  </p>
+      <h1 class="login-title">Courtify</h1>
+      <p class="login-subtitle">Reserva tu cancha. Juega tu pasión.</p>
 
-  <h2>Iniciar Sesión</h2>
+      <h2 class="login-heading">Iniciar Sesión</h2>
 
-  <input type="email" id="email" placeholder="Correo">
-  <input type="password" id="password" placeholder="Contraseña">
-  
+      <div class="login-form">
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="password" placeholder="Contraseña">
+      </div>
 
-<p class="link-recuperar" onclick="recuperarPassword()">
-  ¿Olvidaste tu contraseña?
-</p>
+      <p class="link-recuperar" onclick="recuperarPassword()">
+        ¿Olvidaste tu contraseña?
+      </p>
 
-  <!-- 👇 SIN onclick -->
-  <button id="btnLogin">Ingresar</button>
-  <button id="btnIrRegistro">Registrarse</button>
-</div>
+      <div class="login-buttons">
+        <button id="btnLogin" class="btn-login">Ingresar</button>
+        <button id="btnIrRegistro" class="btn-registro">Registrarse</button>
+      </div>
 
-<script type="module" src="auth.js"></script>
+    </div>
+  </div>
 
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
